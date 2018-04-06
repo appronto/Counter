@@ -40,6 +40,7 @@ define([
         targetDateTimeAttr: "",
         timerValueAttr: "",
         animationBehavior: "",
+        countingBehavior: "",
         oncompletemf: "",
         showDays: false,
         daysText: "",
@@ -89,7 +90,17 @@ define([
 
         uninitialize: function() {
             logger.debug(this.id + ".uninitialize");
-
+            
+            if(this.countingBehavior === "CountUp" && this._contextObj !== null){
+                var time = $(this.tcNode).TimeCircles().getTime() * -1;
+                console.log(this.id + ".Time: " + time);
+                this._contextObj.set(this.timerValueAttr, time);
+               
+                if (this.oncompletemf !== "") {
+                    this._onComplete(0, 0, 0);
+                }
+            } 
+             
             $(this.tcNode).removeData();
             $(this.tcNode).TimeCircles().destroy();
         },
@@ -98,13 +109,18 @@ define([
             logger.debug(this.id + "._setupEvents");
             var bg_width = mx.parser.parseValue(this.backgroundWidth.substring(1), "integer");
             var fg_width = mx.parser.parseValue("0." + this.foregroundWidth.substring(1), "float");
-
+            
+            var countpastzero = false;
+            if(this.countingBehavior === "CountUp"){
+                countpastzero = true;
+            } 
+            
             this._options = {
                 "animation": this.animationBehavior,
                 "bg_width": bg_width / 100,
                 "fg_width": fg_width,
                 "circle_bg_color": this.circleBackgroundColor,
-                "count_past_zero": false,
+                "count_past_zero": countpastzero,
                 "time": {
                     "Days": {
                         "text": this.daysText,
@@ -142,16 +158,14 @@ define([
 
                 var valueString, jqueryTcNode;
 
-                if (this.targetDateTimeAttr !== "") {
+                if (this.targetDateTimeAttr !== "" && this.countingBehavior === "CountDown") {
                     valueString = mx.parser.formatAttribute(this._contextObj, this.targetDateTimeAttr, {
                         datePattern: "yyyy-MM-dd HH:mm:ss"
                     });
                     domAttr.set(this.tcNode, "data-date", valueString);
-                } else {
-                    if (this.timerValueAttr !== "") {
-                        valueString = this._contextObj.get(this.timerValueAttr);
-                        domAttr.set(this.tcNode, "data-timer", valueString);
-                    }
+                } else if (this.timerValueAttr !== "" && this.countingBehavior === "CountDown") {
+                    valueString = Math.floor(this._contextObj.get(this.timerValueAttr));
+                    domAttr.set(this.tcNode, "data-timer", valueString);
                 }
 
                 // clear out old values
@@ -170,9 +184,9 @@ define([
             this._executeCallback(callback, "_updateRendering");
         },
 
-        _onComplete: function(unit, value, total) {
+        _onComplete: function(unit, value,  total) {
             if (total === 0) {
-                logger.debug(this.id + "._onComplete");
+                console.log(this.id + "._onComplete");
                 mx.ui.action(this.oncompletemf, {
                     params: {
                         applyto: "selection",

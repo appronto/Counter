@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="Counter.widget.Counter" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+<widget id="Counter.widget.Counter" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/" offlineCapable="true">
     <name>Counter</name>
     <description>Provides a countdown to a date and a timer.</description>
 
@@ -17,10 +17,11 @@
         <property key="timerValueAttr" type="attribute" required="false">
             <caption>Timer Value Attribute</caption>
             <category>Behavior</category>
-            <description>The attribute that contains timer value, in seconds</description>
+            <description>The attribute that contains timer value, in seconds. When counting up as Counting Behavior is used, set a decimal as Timer value, because of the usage of millisecondsin the result.</description>
             <attributeTypes>
                 <attributeType name="Integer" />
                 <attributeType name="Long" />
+                <attributeType name="Decimal" />
             </attributeTypes>
         </property>
         <property key="animationBehavior" type="enumeration" required="true" defaultValue="smooth">
@@ -30,6 +31,15 @@
             <enumerationValues>
                 <enumerationValue key="smooth">Smooth</enumerationValue>
                 <enumerationValue key="ticks">Ticks</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="countingBehavior" type="enumeration" required="true" defaultValue="CountDown">
+            <caption>Counting Behavior</caption>
+            <category>Behavior</category>
+            <description>If a time is counted down or the time is countend (in milliseconds). On counting up the On Complete microflow is triggered when the widget is 'destroyed'.</description>
+            <enumerationValues>
+                <enumerationValue key="CountDown">Counting down</enumerationValue>
+                <enumerationValue key="CountUp">Counting up</enumerationValue>
             </enumerationValues>
         </property>
         <property key="oncompletemf" type="microflow" required="false" defaultValue="">
