@@ -43,10 +43,16 @@
             </enumerationValues>
         </property>
         <property key="oncompletemf" type="microflow" required="false" defaultValue="">
-            <caption>On Complete</caption>
+            <caption>On Complete Microflow</caption>
             <category>Behavior</category>
-            <description>The microflow to execute on click</description>
-            <returnType type="Boolean"></returnType>
+            <description>The microflow to execute on complete of counting down or on destroy on counting up.</description>
+            <returnType type="Void"></returnType>
+        </property>
+        <property key="oncompletenano" type="nanoflow" required="false" defaultValue="">
+            <caption>On Complete Nanoflow</caption>
+            <category>Behavior</category>
+            <description>The nanoflow to execute on complete of counting down or on destroy on counting up.</description>
+            <returnType type="Void"></returnType>
         </property>
         <property key="showDays" type="boolean" required="true" defaultValue="false">
             <caption>Show Days</caption>

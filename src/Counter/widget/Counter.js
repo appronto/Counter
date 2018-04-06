@@ -96,7 +96,7 @@ define([
                 console.log(this.id + ".Time: " + time);
                 this._contextObj.set(this.timerValueAttr, time);
                
-                if (this.oncompletemf !== "") {
+                if (this.oncompletemf !== "" || this.oncompletenano !== "") {
                     this._onComplete(0, 0, 0);
                 }
             } 
@@ -174,7 +174,7 @@ define([
                 jqueryTcNode.TimeCircles().destroy();
                 jqueryTcNode.TimeCircles(this._options);
 
-                if (this.oncompletemf !== "") {
+                if (this.oncompletemf !== "" || this.oncompletenano !== "") {
                     jqueryTcNode.TimeCircles().addListener(lang.hitch(this, this._onComplete), "visible");
                 }
             } else {
@@ -186,19 +186,36 @@ define([
 
         _onComplete: function(unit, value,  total) {
             if (total === 0) {
-                console.log(this.id + "._onComplete");
-                mx.ui.action(this.oncompletemf, {
-                    params: {
-                        applyto: "selection",
-                        guids: [this._contextObj.getGuid()]
-                    },
-                    callback: function(obj) {
-                        //TODO what to do when all is ok!
-                    },
-                    error: lang.hitch(this, function(error) {
-                        console.log(this.id + ": An error occurred while executing microflow: " + error.description);
-                    })
-                }, this);
+                if (this.oncompletemf !== ""){
+                    console.log(this.id + "._onComplete microflow trigger");
+                    mx.data.action({
+                        params: {
+                            actionname: this.oncompletemf,
+                            applyto: "selection",
+                            guids: [this._contextObj.getGuid()]
+                        },
+                        origin: this.mxform,
+                        callback: function(obj) {
+                            //TODO what to do when all is ok!
+                        },
+                        error: lang.hitch(this, function(error) {
+                            console.log(this.id + ": An error occurred while executing microflow: " + error.description);
+                        })
+                    }, this);
+                } else if(this.oncompletenano !== ""){
+                    console.log(this.id + "._onComplete nanoflow trigger");
+                    mx.data.callNanoflow({
+                        nanoflow: this.oncompletenano,
+                        origin: this.mxform,
+                        context: this.mxcontext,
+                        callback: function(obj) {
+                            //TODO what to do when all is ok!
+                        },
+                        error: function(error) {
+                            console.log(this.id + ": An error occurred while executing microflow: " + error.description);
+                        }
+                    });
+                }
             }
         },
 
