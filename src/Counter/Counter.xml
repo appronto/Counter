@@ -7,15 +7,15 @@
 
     <properties>
         <property key="targetDateTimeAttr" type="attribute" required="false">
-            <caption>Target DateTime Attribute</caption>
+            <caption>DateTime Attribute</caption>
             <category>Behavior</category>
-            <description>The attribute that contains the datetime to countdown to.</description>
+            <description>The attribute that contains the datetime to countdown to that end or countup as start datetime.</description>
             <attributeTypes>
                 <attributeType name="DateTime" />
             </attributeTypes>
         </property>
         <property key="timerValueAttr" type="attribute" required="false">
-            <caption>Timer Value Attribute</caption>
+            <caption>Timer Attribute</caption>
             <category>Behavior</category>
             <description>The attribute that contains timer value, in seconds. When counting up as Counting Behavior is used, set a decimal as Timer value, because of the usage of millisecondsin the result.</description>
             <attributeTypes>

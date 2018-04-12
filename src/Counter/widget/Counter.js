@@ -158,12 +158,12 @@ define([
 
                 var valueString, jqueryTcNode;
 
-                if (this.targetDateTimeAttr !== "" && this.countingBehavior === "CountDown") {
+                if (this.targetDateTimeAttr !== "") {
                     valueString = mx.parser.formatAttribute(this._contextObj, this.targetDateTimeAttr, {
                         datePattern: "yyyy-MM-dd HH:mm:ss"
                     });
                     domAttr.set(this.tcNode, "data-date", valueString);
-                } else if (this.timerValueAttr !== "" && this.countingBehavior === "CountDown") {
+                } else if (this.timerValueAttr !== "") {
                     valueString = Math.floor(this._contextObj.get(this.timerValueAttr));
                     domAttr.set(this.tcNode, "data-timer", valueString);
                 }
